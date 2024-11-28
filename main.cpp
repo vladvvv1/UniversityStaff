@@ -38,20 +38,38 @@ void printMenu();
 
 int main() {
 	const string filename = "list_of_vehicles.txt";
-	
-	
+	vector<int> valid_numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, -1};    // this vector made of valid integers
+                                                                        // that will help to prevent invalid inputs from the user.
+	int choice = 0;
+
 	cout << "Hello! I'm your Library Assistant. " << endl;
 	printLine();
 
-	int choice = 0;
 	while (choice != -1) {
-		vector<Vehicle> vehicles = readVehiclesFromFile("list_of_vehicles.txt");
-		printMenu();
+        bool valid_choice = false;
+        vector<Vehicle> vehicles = readVehiclesFromFile("list_of_vehicles.txt");
+
+        printMenu();
+        printLine();
+        while (!valid_choice) {
+            cout << "Choose from 1 to 10, or '-1' to exit: ";
+            cin >> choice;
+
+            // check if number is in the vector
+            if (std::find(valid_numbers.begin(), valid_numbers.end(), choice) != valid_numbers.end()) {
+                valid_choice = true;
+            }
+            else {
+            std::cout << "Invalid choice. Try again." << "\n\n";
+            }
+
+            if (cin.fail()) {
+                cin.clear(); // clear error flag
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');    // Ignore invalid input
+            }
+        }
+		
 		printLine();
-		cout << "Choose from 1 to 10, or '-1' to exit: ";
-		printLine();
-		cin >> choice;
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 		switch (choice) {
 		case 1:
@@ -86,9 +104,11 @@ int main() {
 			break;
 		case -1:
 			cout << "\nLeaving the Library, thank you!" << endl;
+            break;
 		default:
-			cout << "Invalid input, please try again. " << endl;
-		}
+			cout << "Invalid input, please try again... " << endl;
+            break;
+        }
 	}
 
 	return 0;
