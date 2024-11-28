@@ -1,0 +1,9 @@
+Chevrolet	impala	45000	3.6	2017
+Nissan	Altima	28000	2	2019
+Porsche	cayenne	85000	4	2021
+Toyota	camry	35000	2.5	2021
+Volkswagen	passat	30000	2.5	2000
+Bmw	f90	303400	3.5	2020
+Bmw	f292	23030	4	2021
+Ford	mustang	60000	5	2022
+Tesla	model2	40000	0	2023
