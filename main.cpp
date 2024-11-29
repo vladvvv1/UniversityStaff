@@ -64,10 +64,10 @@ int main() {
                 if (find(valid_numbers.begin(), valid_numbers.end(), choice) != valid_numbers.end()) {
                     break;
                 } else {
-                    cout << "Invalid choice. Try again." << endl;
+                    cout << "Invalid choice. Try again." << "\n\n";
                 }
             } else {
-                cout << "Invalid choice. Try again." << endl;
+                cout << "Invalid choice. Try again." << "\n\n";
             }
         }
 		
@@ -108,7 +108,7 @@ int main() {
 			cout << "\nLeaving the Library, thank you!" << endl;
             break;
 		default:
-			cout << "Invalid input, please try again... " << endl;
+			cout << "Invalid input, please try again. " << endl;
             break;
         }
 	}
@@ -130,6 +130,19 @@ bool isValidNumber(const string &input) {
     }
 
     return true;  // All characters are digits (or a leading '-')
+}
+
+bool isValidNumberWithDot(const string &input) {
+    bool has_dot = false;
+    for (char ch : input) {
+        if (ch == '.') {
+            if (has_dot) return false;  // Only one dot is allowed
+            has_dot = true;
+        } else if (!isdigit(ch) && ch != '-') {
+            return false;  // Only digits and one dot allowed
+        }
+    }
+    return true;
 }
 
 void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
@@ -157,21 +170,84 @@ void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
             break;
         }
         else {
-            cout << "The manufacturer's name doesn't allowed to contain integers." << endl;
+            cout << "The manufacturer's name have to contain only letters." << "\n\n";
         }
 	}
 
-	cout << "Please enter the vehicle's model: ";
-	getline(cin, new_vehicle.model);
+    while (true) {
+        cout << "Please enter the vehicle's model: ";
+        string input;
+        getline(cin, input);
 
-	cout << "Please enter the vehicle's price: ";
-	cin >> new_vehicle.price;
+        bool is_valid = true;
+        if (!input.empty()) {
+            is_valid = false;
+            break;
+        }
 
-	cout << "Please enter the vehicle's power: ";
-	cin >> new_vehicle.power;
+        if (!is_valid) {
+            new_vehicle.model = input;
+            break;
+        }
+        else
+        {
+            cout << "Invalid input. Please try again." << "\n\n";
+        }
+    }
 
-	cout << "Please enter the vehicle's year of manufacturer: ";
-	cin >> new_vehicle.year_of_manufacturer;
+	while (true) {
+        string input;
+        cout << "Please enter the vehicle's price: ";
+        getline(cin, input);
+
+        bool is_valid = false;
+        if (isValidNumber(input)) {
+            if (input[0] == '-') cout << "Value can't be negative" << "\n\n";
+            else {
+                double price = stod(input);
+                new_vehicle.price = price;
+                break;
+            }
+        } else {
+            cout << "Invalid input. Try to type only numbers." << "\n\n";
+        }
+    }
+
+    while (true) {
+        string input;
+        cout << "Please enter the vehicle's power: ";
+        getline(cin, input);
+
+        bool is_valid = false;
+        if (isValidNumber(input)) {
+            if (input[0] == '-') cout << "Value can't be negative" << "\n\n";
+            else {
+                double power = stod(input);
+                new_vehicle.power = power;
+                break;
+            }
+        } else {
+            cout << "Invalid input. Try to type only numbers." << "\n\n";
+        }
+    }
+
+    while (true) {
+        string input;
+        cout << "Please enter the vehicle's year of manufacturer: ";
+        getline(cin, input);
+
+        bool is_valid = false;
+        if (isValidNumber(input)) {
+            if (input[0] == '-') cout << "Value can't be negative" << "\n\n";
+            else {
+                int year = stoi(input);
+                new_vehicle.year_of_manufacturer = year;
+                break;
+            }
+        } else {
+            cout << "Invalid input. Try to type only numbers." << "\n\n";
+        }
+    }
 
 	// Write the new vehicle to the file
 	ofstream outputFile(filename, std::ios::app); // Open the file in append mode
