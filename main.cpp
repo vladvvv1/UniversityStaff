@@ -69,8 +69,6 @@ int main() {
             } else {
                 cout << "Invalid choice. Try again." << endl;
             }
-
-            
         }
 		
 		printLine();
@@ -136,29 +134,31 @@ bool isValidNumber(const string &input) {
 
 void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
 	Vehicle new_vehicle;
-
-	cout << "Please enter the vehicle's manufacturer: ";
-	//cin.ignore();
-	//getline(cin, new_vehicle.manufacturer);
+	// cout << "Please enter the vehicle's manufacturer: ";
+	// cin.ignore();
 	while (true) {
 		string input;
 		cout << "Please enter the vehicle's manufacturer: ";
-		cin >> input;
-		
+		getline(cin, input);
 
-		bool is_valid = true;
+        bool is_valid = true;  // Flag to track if input is valid
+
 		for (char ch : input)
 		{
-			if (!isdigit(ch))
+			if (!isalpha(ch))
 			{
-				is_valid = false;
-				break;
+                is_valid = false;
+                break;
 			}
 		}
-		if (is_valid)
-		{
-			input = stoi(new_vehicle.manufacturer);
-		}
+
+        if (is_valid) {
+            new_vehicle.manufacturer = input;
+            break;
+        }
+        else {
+            cout << "The manufacturer's name doesn't allowed to contain integers." << endl;
+        }
 	}
 
 	cout << "Please enter the vehicle's model: ";
