@@ -18,6 +18,7 @@ struct Vehicle
 	int year_of_manufacturer;
 };
 
+bool isValidNumber(const string &input);
 void addVehicle(vector<Vehicle> &vehicles, const string &list_of_vehicles);
 void searchByManufacturer(const vector<Vehicle> &vehicles);
 void searchByModel(const vector<Vehicle>& vehicle);
@@ -46,27 +47,30 @@ int main() {
 	printLine();
 
 	while (choice != -1) {
-        bool valid_choice = false;
         vector<Vehicle> vehicles = readVehiclesFromFile("list_of_vehicles.txt");
 
         printMenu();
         printLine();
-        while (!valid_choice) {
+
+        while (true) {
             cout << "Choose from 1 to 10, or '-1' to exit: ";
-            cin >> choice;
+            string input;
+            getline(cin, input);
 
-            // check if number is in the vector
-            if (std::find(valid_numbers.begin(), valid_numbers.end(), choice) != valid_numbers.end()) {
-                valid_choice = true;
-            }
-            else {
-            std::cout << "Invalid choice. Try again." << "\n\n";
+            if (isValidNumber(input)) {
+                // Convert the valid input to an integer
+                choice = stoi(input);
+
+                if (find(valid_numbers.begin(), valid_numbers.end(), choice) != valid_numbers.end()) {
+                    break;
+                } else {
+                    cout << "Invalid choice. Try again." << endl;
+                }
+            } else {
+                cout << "Invalid choice. Try again." << endl;
             }
 
-            if (cin.fail()) {
-                cin.clear(); // clear error flag
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');    // Ignore invalid input
-            }
+            
         }
 		
 		printLine();
@@ -112,6 +116,22 @@ int main() {
 	}
 
 	return 0;
+}
+
+bool isValidNumber(const string &input) {
+    // Check if the entire string is numeric (only digits and optional leading '-' for negative numbers)
+    if (input.empty()) return false;
+
+    int start = 0;
+    if (input[0] == '-') start = 1;  // Allow for negative numbers
+
+    for (int i = start; i < input.length(); ++i) {
+        if (!isdigit(input[i])) {
+            return false;  // Contains non-digit characters
+        }
+    }
+
+    return true;  // All characters are digits (or a leading '-')
 }
 
 void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
