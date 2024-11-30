@@ -115,27 +115,6 @@ int main() {
 
 	return 0;
 }
- 
-bool isValidDouble(const string &input) {
-    // Check if the input string represents a valid double
-    if (input.empty()) return false;
-
-    int start = 0;
-    if (input[0] == '-') start = 1;  // Allow for negative numbers
-
-    bool decimal_point_found = false;
-
-    for (int i = start; i < input.length(); ++i) {
-        if (input[i] == '.') {
-            if (decimal_point_found) {
-                return false;  // More than one decimal point
-            }
-            decimal_point_found = true;
-        } else if (!isdigit(input[i])) {
-            return false;  // Contains non-digit characters
-        }
-    }
-}
 
 bool isValidNumber(const string &input) {
     // Check if the entire string is numeric (only digits and optional leading '-' for negative numbers)
@@ -239,21 +218,30 @@ void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
 
     while (true) {
         string input;
-        double power;
         cout << "Please enter the vehicle's power: ";
-        cin >> input;
+        getline(cin, input);
 
-        if (isValidDouble(input)) {
-            power = stod(input); // Convert string to double
+        bool is_valid = true;
 
-            if (power < 0) {
-                cout << "Value can't be negative. Please enter a positive number.\n\n";
-            } else {
-                new_vehicle.power = power;
+        for (char ch : input) 
+        {
+            if (isdigit(ch))
+            {
+                is_valid = false;
                 break;
             }
-        } else {
-            cout << "Invalid input. Please enter a valid number.\n\n";
+        }
+
+        if (!is_valid) {
+            double power = stod(input);
+            new_vehicle.power = power;
+            break;
+        }
+        else if (input.empty()) {
+            cout << "Power can't be empty. Please try again.";
+        }
+        else {
+            cout << "Invalid input. Please try again";
         }
     }
 
@@ -263,15 +251,25 @@ void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
         getline(cin, input);
 
         bool is_valid = false;
-        if (isValidNumber(input)) {
-            if (input[0] == '-') cout << "Value can't be negative" << "\n\n";
-            else {
-                int year = stoi(input);
-                new_vehicle.year_of_manufacturer = year;
+
+        for (char ch : input){
+            if (isdigit(ch))
+            {
+                is_valid = true;
                 break;
             }
-        } else {
-            cout << "Invalid input. Try to type only numbers." << "\n\n";
+        }
+
+        if (is_valid) {
+            int year = stoi(input);
+            new_vehicle.year_of_manufacturer = year;
+            break;
+        }
+        else if (input.empty()) {
+            cout << "Invalid input. Year of manufacturer can't be empty." << "\n\n";
+        }
+        else {
+            cout << "Invalid input. Please try again." << "\n\n";
         }
     }
 
