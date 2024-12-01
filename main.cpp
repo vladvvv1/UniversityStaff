@@ -49,6 +49,7 @@ int main() {
 	while (choice != -1) {
         vector<Vehicle> vehicles = readVehiclesFromFile("list_of_vehicles.txt");
 
+        printLine();
         printMenu();
         printLine();
 
@@ -56,6 +57,7 @@ int main() {
             cout << "Choose from 1 to 10, or '-1' to exit: ";
             string input;
             getline(cin, input);
+
 
             if (isValidNumber(input)) {
                 // Convert the valid input to an integer
@@ -132,19 +134,6 @@ bool isValidNumber(const string &input) {
     return true;  // All characters are digits (or a leading '-')
 }
 
-bool isValidNumberWithDot(const string &input) {
-    bool has_dot = false;
-    for (char ch : input) {
-        if (ch == '.') {
-            if (has_dot) return false;  // Only one dot is allowed
-            has_dot = true;
-        } else if (!isdigit(ch) && ch != '-') {
-            return false;  // Only digits and one dot allowed
-        }
-    }
-    return true;
-}
-
 void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
 	Vehicle new_vehicle;
 	// cout << "Please enter the vehicle's manufacturer: ";
@@ -153,6 +142,7 @@ void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
 		string input;
 		cout << "Please enter the vehicle's manufacturer: ";
 		getline(cin, input);
+        
 
         bool is_valid = true;  // Flag to track if input is valid
 
@@ -212,7 +202,7 @@ void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
             cout << "Price can't be empty. Please try again.";
         }
         else {
-            cerr << "Invalid input. Please try again";
+            cerr << "Invalid input. Please try again" << "\n\n";
         }
     }
 
@@ -241,7 +231,7 @@ void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
             cout << "Power can't be empty. Please try again.";
         }
         else {
-            cout << "Invalid input. Please try again";
+            cout << "Invalid input. Please try again" << "\n\n";
         }
     }
 
@@ -294,8 +284,8 @@ void searchByManufacturer(const vector<Vehicle>& vehicles)
 	cout << "Please enter the manufacturer's name whose vehicles you want to find. ";
 	cin >> manufacturertofind;
 	
-	//cin.ignore();
-	/*getline(cin, manufacturertofind);*/
+	// cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	// getline(cin, manufacturertofind);
 
 	transform(manufacturertofind.begin(), manufacturertofind.end(), manufacturertofind.begin(), ::tolower);	// convert to lowercase
 
