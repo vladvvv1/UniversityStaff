@@ -2,9 +2,11 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <cctype>
 #include <sstream>		// to work with strings as streams
 #include <algorithm>	// std::sort
 #include <limits>
+
 
 using namespace std;
 
@@ -56,8 +58,8 @@ int main() {
         while (true) {
             cout << "Choose from 1 to 10, or '-1' to exit: ";
             string input;
-            getline(cin, input);
-
+            // getline(cin, input);
+            cin >> input;
 
             if (isValidNumber(input)) {
                 // Convert the valid input to an integer
@@ -66,10 +68,10 @@ int main() {
                 if (find(valid_numbers.begin(), valid_numbers.end(), choice) != valid_numbers.end()) {
                     break;
                 } else {
-                    cout << "Invalid choice. Try again." << "\n\n";
+                    cout << "Invalid choice. Try again1." << "\n\n";
                 }
             } else {
-                cout << "Invalid choice. Try again." << "\n\n";
+                cout << "Invalid choice. Try again2." << "\n\n";
             }
         }
 		
@@ -80,6 +82,7 @@ int main() {
 			addVehicle(vehicles, filename);
 			break;
 		case 2:
+            // string name = "manufacturer";
 			searchByManufacturer(vehicles);
 			break;
 		case 3:
@@ -141,8 +144,7 @@ void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
 	while (true) {
 		string input;
 		cout << "Please enter the vehicle's manufacturer: ";
-		getline(cin, input);
-        
+		cin >> input;
 
         bool is_valid = true;  // Flag to track if input is valid
 
@@ -167,7 +169,8 @@ void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
     while (true) {
         cout << "Please enter the vehicle's model: ";
         string input;
-        getline(cin, input);
+        // getline(cin, input);
+        cin >> input;
 
         if (!input.empty()) {
             new_vehicle.model = input;
@@ -180,8 +183,9 @@ void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
 	while (true) {
         string input;
         cout << "Please enter the vehicle's price: ";
-        getline(cin, input);
-
+        // getline(cin, input);
+        cin >> input;
+        
         bool is_valid = true;
 
         for (char ch : input) 
@@ -202,14 +206,15 @@ void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
             cout << "Price can't be empty. Please try again.";
         }
         else {
-            cerr << "Invalid input. Please try again" << "\n\n";
+            cerr << "Invalid input. Please try to type only numbers." << "\n\n";
         }
     }
 
     while (true) {
         string input;
         cout << "Please enter the vehicle's power: ";
-        getline(cin, input);
+        // getline(cin, input);
+        cin >> input;
 
         bool is_valid = true;
 
@@ -221,6 +226,7 @@ void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
                 break;
             }
         }
+    
 
         if (!is_valid) {
             double power = stod(input);
@@ -238,7 +244,8 @@ void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
     while (true) {
         string input;
         cout << "Please enter the vehicle's year of manufacturer: ";
-        getline(cin, input);
+        // getline(cin, input);
+        cin >> input;
 
         bool is_valid = false;
 
@@ -276,41 +283,6 @@ void addVehicle(vector<Vehicle>& vehicles, const string& filename) {
 	}
 }
 
-// fucntion to search for vehicles by manufacturer
-void searchByManufacturer(const vector<Vehicle>& vehicles)
-{
-	vector<Vehicle> result;
-	string manufacturertofind;
-	cout << "Please enter the manufacturer's name whose vehicles you want to find. ";
-	cin >> manufacturertofind;
-	
-	// cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	// getline(cin, manufacturertofind);
-
-	transform(manufacturertofind.begin(), manufacturertofind.end(), manufacturertofind.begin(), ::tolower);	// convert to lowercase
-
-	// convert name of the manufacturer from the database into lowercase to compare with inputed one by user.
-	for (const Vehicle& vehicle : vehicles) {
-		string manufacturerLowerCase = vehicle.manufacturer;
-		transform(manufacturerLowerCase.begin(), manufacturerLowerCase.end(), manufacturerLowerCase.begin(), ::tolower);
-
-		if (manufacturerLowerCase == manufacturertofind) {
-			result.push_back(vehicle);
-		}
-	}
-
-	if (result.empty()) {
-		cout << "No vehicles found for manufacturer '" << manufacturertofind << "'." << endl;
-	}
-	else {
-		cout << "Vehicles by manufacturer '" << manufacturertofind << "':" << endl;
-		for (const Vehicle& vehicles : result) {
-			cout << vehicles.manufacturer << "\t" << vehicles.model << "\t"
-				<< vehicles.price << "\t" << vehicles.power << "\t" << vehicles.year_of_manufacturer << endl;
-		}
-	}
-}
-
 vector<Vehicle> readVehiclesFromFile(const string& filename) {
 	vector<Vehicle> vehicles;
 	ifstream file(filename);
@@ -339,6 +311,39 @@ vector<Vehicle> readVehiclesFromFile(const string& filename) {
 	return vehicles;
 }
 
+void searchByManufacturer(const vector<Vehicle>& vehicles)
+{
+	vector<Vehicle> result;
+    string manufacturertofind;
+    cout << "Enter the manufacturer's name you want to find: ";
+
+    cin >> manufacturertofind;
+
+	transform(manufacturertofind.begin(), manufacturertofind.end(), manufacturertofind.begin(), ::tolower);	// convert to lowercase
+
+	// convert name of the manufacturer from the database into lowercase to compare with inputed one by user.
+	for (const Vehicle& vehicle : vehicles) {
+		string manufacturerLowerCase = vehicle.manufacturer;
+		transform(manufacturerLowerCase.begin(), manufacturerLowerCase.end(), manufacturerLowerCase.begin(), ::tolower);
+
+		if (manufacturerLowerCase == manufacturertofind) {
+			result.push_back(vehicle);
+		}
+	}
+
+	if (result.empty()) {
+		cout << "No vehicles found for manufacturer '" << manufacturertofind << "'." << endl;
+	}
+	else {
+		cout << "Vehicles by manufacturer '" << manufacturertofind << "':" << endl;
+
+		for (const Vehicle& vehicles : result) {
+			cout << vehicles.manufacturer << "\t" << vehicles.model << "\t"
+				<< vehicles.price << "\t" << vehicles.power << "\t" << vehicles.year_of_manufacturer << endl;
+		}
+	}
+}
+
 // fucntion to search for vehicles by model
 void searchByModel(const vector<Vehicle>& vehicles)
 {
@@ -346,9 +351,9 @@ void searchByModel(const vector<Vehicle>& vehicles)
 	string modeltofind;
 	//cin.ignore();
 	cout << "Please enter the model's name whose vehicles you want to find. ";
-	/*getline(cin, modeltofind);
-	*/
-	cin >> modeltofind;
+	
+    cin >> modeltofind;
+
 
 	transform(modeltofind.begin(), modeltofind.end(), modeltofind.begin(), ::tolower);	// convert to lowercase
 
@@ -586,16 +591,24 @@ bool compareByYear(const Vehicle& a, const Vehicle& b) {
 
 void sortLibrary(vector<Vehicle>& vehicles, const string& filename) {
 	char ch = '\0';
+
 	while (ch != 'q') {
 		cout << "Please choose how you want to sort the Library: 1 - by manufacturer, 2 - by year or 'q' to exit when you're done with sorting. " << "\n";
 		cin >> ch;
-		switch (ch) {
+		
+        switch (ch) {
 		case '1':
-			sort(vehicles.begin(), vehicles.end(), compareByManufacturer);
+			sort(vehicles.begin(), vehicles.end(), [](const Vehicle& a, const Vehicle &b)
+            {
+                return a.manufacturer < b.manufacturer;
+            });
 			showLibrary(vehicles);
 			break;
 		case '2':
-			sort(vehicles.begin(), vehicles.end(), compareByYear);
+			sort(vehicles.begin(), vehicles.end(), [](const Vehicle& a, const Vehicle &b)
+            {
+                return a.year_of_manufacturer < b.year_of_manufacturer;
+            });
 			showLibrary(vehicles);
 			break;
 		default:
